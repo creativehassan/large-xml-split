@@ -1,0 +1,24 @@
+$filenum = 1;
+$feed_uri = plugin_dir_path( __FILE__ ) . 'senticnet5.rdf.xml';
+
+$fd = fopen($feed_uri, 'r');
+$folder = plugin_dir_path( __FILE__ ) . 'sub_xml';
+$fileOfXml = fopen("$folder/feed_".sprintf("%09s", $filenum).".xml", "w") or die("Unable to open file!");
+$flag = false;
+$starter = 0;
+$counter = 1;
+$objectPerFile = 10;
+$ajax_steps = 1;
+$numlimit = 0;
+$bufferVal = "";
+while ( !feof($fd) )
+{
+	$buffer = stream_get_line($fd, 1000000, 'Description>');
+	fwrite($fileOfXml, $buffer);
+	if($counter > 50){
+		$counter = 1;
+		$filenum++;
+		$fileOfXml = fopen("$folder/feed_".sprintf("%09s", $filenum).".xml", "w") or die("Unable to open file!");
+	}
+	$counter++;
+}
